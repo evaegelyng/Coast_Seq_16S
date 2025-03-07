@@ -1,5 +1,5 @@
 # Script to normalize phyloseq objects from COSQ data
-# Should be run from the results folder, using the hmsc environment
+# Should be run from the both_seasons/results folder, using the hmsc environment
 
 ## Load packages
 library(phyloseq)
@@ -9,7 +9,7 @@ library(ggplot2)
 
 ##Make phyloseq object from tables
 ###Load OTU table
-otu_mat<-as.matrix(read.table("cleaned_otu_silva_EES.txt", sep="\t", header=T, row.names=1,check.names=F))
+otu_mat<-as.matrix(read.table("cleaned_otu_silva_EES3.txt", sep="\t", header=T, row.names=1,check.names=F))
 
 ###Summarize no. of reads per PCR replicate
 reads<-colSums(otu_mat)
@@ -19,7 +19,7 @@ min(reads)
 quantile(reads,probs=c(0.005,0.01,0.02,0.05))
 
 ###Load taxonomy table
-taxonomy_silva<-read.table("cleaned_tax_silva_EES.txt", sep='\t', header=T, comment="")
+taxonomy_silva<-read.table("cleaned_tax_silva_EES3.txt", sep='\t', header=T, comment="")
 tax_mat_b<-as.matrix(taxonomy_silva)
 
 OTU = otu_table(otu_mat, taxa_are_rows = TRUE)
@@ -27,7 +27,7 @@ TAX_b = tax_table(tax_mat_b)
 p_SILVA = phyloseq(OTU, TAX_b)
 
 ###Load metadata
-metadata<-read.table("metadata/cleaned_silva_metadata_EES.txt", sep="\t", header=T)
+metadata<-read.table("metadata/cleaned_silva_metadata_EES3.txt", sep="\t", header=T)
 
 ##SITE INFO
 c_s<-read.table("metadata/cluster_site.txt", sep="\t", header=T)
@@ -122,7 +122,7 @@ COSQ_rare2
 tax_m<-data.frame(tax_table(COSQ_rare2))
 otu_m<-data.frame(otu_table(COSQ_rare2),check.names=F)
 
-write.table(data.frame(sample_data(COSQ_rare2), check.names=F), "metadata/metadata_rarefy_dada2.txt", sep="\t", quote=FALSE, row.names=TRUE)
+write.table(data.frame(sample_data(COSQ_rare2), check.names=F), "metadata/metadata_rarefy_dada2_c.txt", sep="\t", quote=FALSE, row.names=TRUE)
 
-write.table(otu_m, "otu_rarefy_dada2.txt", sep="\t", quote=FALSE, row.names=TRUE)
-write.table(tax_m, "tax_rarefy_dada2.txt", sep="\t", quote=FALSE, row.names=TRUE)
+write.table(otu_m, "otu_rarefy_dada2_c.txt", sep="\t", quote=FALSE, row.names=TRUE)
+write.table(tax_m, "tax_rarefy_dada2_c.txt", sep="\t", quote=FALSE, row.names=TRUE)

@@ -1,3 +1,5 @@
+# activate hmsc conda environment
+# conda activate hmsc
 library("phyloseq")
 
 #Load tables
@@ -48,18 +50,16 @@ sort(unique(d_tax3$Phylum))
 sort(unique(d_tax3$Class))
 nrow(d_tax3) # 67361
 
-d_tax3.1<-subset(d_tax3, !(Class=="uncultured"))
-nrow(d_tax3.1) # 67361
-sort(unique(d_tax3.1$Order))
+d_tax4<-subset(d_tax3, !(Class=="uncultured"))
+nrow(d_tax4) # 67361
+sort(unique(d_tax4$Order))
 
-#d_tax3.2<-subset(d_tax3.1, !(Order=="uncultured"))
-#nrow(d_tax3.2)
-
-#d_tax4.1<-d_tax3.2[!is.na(d_tax3.2$Order), ]
-#nrow(d_tax4.1)
+d_tax5<-subset(d_tax4, !(Order=="Chloroplast"))
+nrow(d_tax5) # 54435
+sort(unique(d_tax5$Order))
 
 #Filter otu_table according to taxonomy
-n_otu_mat<-otu_mat[rownames(otu_mat) %in% rownames(d_tax3.1),]
+n_otu_mat<-otu_mat[rownames(otu_mat) %in% rownames(d_tax5),]
 #####
 
 #Load metadata
@@ -68,7 +68,7 @@ metadata<-read.table("no_control_no_sing_samples_cleaned_metadata_ASV_wise_EES.t
 sampledata = sample_data(data.frame(metadata, row.names=metadata$sample_ID, stringsAsFactors=FALSE))
 
 OTU = otu_table(n_otu_mat, taxa_are_rows = TRUE)
-TAX = tax_table(as.matrix(d_tax4.1))
+TAX = tax_table(as.matrix(d_tax5))
 
 p_DADAwang = phyloseq(OTU, TAX)
 
@@ -100,8 +100,8 @@ new_otu_mat<-data.frame(otu_table(tudao),check.names=F)
 tax_mat_b<-as.matrix(tax_mat_kon[,c("Kingdom","Phylum","Class","Order","Family","Genus")])
 
 setwd("/home/evaes/eDNA/faststorage/Velux/CoastSequence/Autumn/Bac16s/both_silva/results/metadata")
-write.table(data.frame(sample_data(tudao), check.names=F), "cleaned_silva_metadata_EES.txt", sep="\t", quote=FALSE, row.names=TRUE)
+write.table(data.frame(sample_data(tudao), check.names=F), "cleaned_silva_metadata_EES3.txt", sep="\t", quote=FALSE, row.names=TRUE)
 
 setwd("/home/evaes/eDNA/faststorage/Velux/CoastSequence/Autumn/Bac16s/both_silva/results")
-write.table(new_otu_mat, "cleaned_otu_silva_EES.txt", sep="\t", quote=FALSE, row.names=TRUE)
-write.table(tax_mat_b, "cleaned_tax_silva_EES.txt", sep="\t", quote=FALSE, row.names=TRUE)
+write.table(new_otu_mat, "cleaned_otu_silva_EES3.txt", sep="\t", quote=FALSE, row.names=TRUE)
+write.table(tax_mat_b, "cleaned_tax_silva_EES3.txt", sep="\t", quote=FALSE, row.names=TRUE)
