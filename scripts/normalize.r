@@ -122,7 +122,7 @@ COSQ_rare2
 tax_m<-data.frame(tax_table(COSQ_rare2))
 otu_m<-data.frame(otu_table(COSQ_rare2),check.names=F)
 
-write.table(data.frame(sample_data(COSQ_rare2), check.names=F), "metadata/metadata_rarefy_dada2_c.txt", sep="\t", quote=FALSE, row.names=TRUE)
+write.table(data.frame(sample_data(COSQ_rare2), check.names=F), "metadata/metadata_rarefy_dada2.txt", sep="\t", quote=FALSE, row.names=TRUE)
 
-write.table(otu_m, "otu_rarefy_dada2_c.txt", sep="\t", quote=FALSE, row.names=TRUE)
-write.table(tax_m, "tax_rarefy_dada2_c.txt", sep="\t", quote=FALSE, row.names=TRUE)
+write.table(otu_m, "otu_rarefy_dada2.txt", sep="\t", quote=FALSE, row.names=TRUE)
+write.table(tax_m, "tax_rarefy_dada2.txt", sep="\t", quote=FALSE, row.names=TRUE)

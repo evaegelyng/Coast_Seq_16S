@@ -38,17 +38,28 @@ d$source<-meta_tab$source[match(d$root, meta_tab$sample_root)]
 sample_data(p_SILVA_3)<-d[,c("root","source")]
 
 # Merge ASVs by class
-p_SILVA_4<-tax_glom(p_SILVA_3, taxrank="Class")
+p_SILVA_4<-tax_glom(p_SILVA_3, taxrank="Phylum")
 p_SILVA_4
 
-# Remove low-abundance classes
-p_SILVA_5 = prune_taxa(taxa_sums(p_SILVA_4) > 500000, p_SILVA_4)
-
 # Make barplot of raw read abundance
-barplot<-plot_bar(p_SILVA_5, "source", fill="Class")+geom_bar(stat="identity")+
+barplot<-plot_bar(p_SILVA_4, "source", fill="Phylum")+geom_bar(stat="identity")+
   theme_classic() + 
   theme(legend.position = "right", legend.text = element_text(size = 12), legend.title = element_text(size=14), axis.text = element_text(size = 12),axis.title.x = element_blank(), axis.title.y = element_text(size=14),plot.margin = unit(c(0,0.4,0,0.4), 'lines'))+
   ggtitle("")+
     labs(y = "Read count")
 
 ggsave(barplot,filename="barplot_contaminants.png",width=10,height=10)
+
+# Remove low-abundance phyla
+TopPhyla <- names(sort(taxa_sums(p_SILVA_4), TRUE)[1:6])
+p_SILVA_5 <- prune_taxa(TopPhyla, p_SILVA_4)
+
+# Make barplot of raw read abundance
+barplot<-plot_bar(p_SILVA_5, "source", fill="Phylum")+geom_bar(stat="identity")+
+ scale_fill_manual(breaks = c("Acidobacteriota","Actinobacteriota","Bacteroidota", "Desulfobacterota","Firmicutes","Proteobacteria"), values = c("#66C2A5", "#FC8D62", "forestgreen", "deepskyblue1", "brown", "#FFD92F"))+
+  theme_classic() + 
+  theme(legend.position = "right", legend.text = element_text(size = 12), legend.title = element_text(size=14), axis.text = element_text(size = 12),axis.title.x = element_blank(), axis.title.y = element_text(size=14),plot.margin = unit(c(0,0.4,0,0.4), 'lines'))+
+  ggtitle("")+
+    labs(y = "Read count")
+
+ggsave(barplot,filename="barplot_contaminants_top6.png",width=10,height=10)
